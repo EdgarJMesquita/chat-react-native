@@ -1,21 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ContextProvider } from './src/context/context';
+import { Routes } from './src/routes';
+
+export type MessageProps = {
+  id: string;
+  text: string;
+  sender: string;
+}
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ContextProvider>
+      <StatusBar style="light" translucent/>
+      <Routes />
+    </ContextProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
