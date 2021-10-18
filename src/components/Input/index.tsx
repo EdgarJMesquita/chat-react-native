@@ -31,44 +31,24 @@ export function Input({socket}:Props) {
   }
 
   async function sendFile(){
-    const response = await ImagePicker.launchImageLibraryAsync();
+    const response = await ImagePicker.launchImageLibraryAsync({
+      base64: true
+    });
     if(response.cancelled) return;
 
     const uris = response.uri.split('.');
     const ext = uris[uris.length-1];
-    const formData:any = new FormData();
 
     const picture = {
-      name: 'avatar',
-      type: `image/${ext}`,
-      uri: response.uri
+      image: {
+        base64: response.base64,
+        ext,
+      },
+      sender: 'Mobile',
+      text: ''
     };
-    formData.append('avatar',picture);
-
-    try { 
-      const config = {
-        headers:{
-          "Content-type":"multipart/form-data" 
-        } 
-      }
-      const { data } = await api.post('/upload',
-        formData, 
-        config
-      ) as ResponseProps;
-      
-      const newMessage = {
-        type: 'image',
-        url: data.imageURL,
-        sender: 'Mobile',
-        text: ''
-      }
-      socket?.emit('chat', newMessage);
-
-    } catch (error) {
-      console.log(error);
-    }
+    socket?.emit('chat', picture);
   }
-
   return(
     <View style={styles.input}>
       <TextInput

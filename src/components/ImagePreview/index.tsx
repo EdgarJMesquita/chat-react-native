@@ -6,22 +6,19 @@ import { Entypo } from '@expo/vector-icons';
 import { styles } from './styles';
 
 type Props = {
-  uri: string;
+  uri?: string;
+  base64?: string;
+  ext?: string;
 }
 
-export function ImagePreview({uri}:Props) {
+export function ImagePreview({uri,base64, ext}:Props) {
   const [isOpen, setIsOpen] = useState(false);
-
-  function handleModal(){
-    console.log('clicked')
-  }
 
   return(
     <Pressable onPress={()=>setIsOpen(true)}>
-      <Image source={{uri}} style={styles.image}/>
+      <Image source={{uri}} resizeMode="contain" style={styles.image}/>
       <RNModal
         isVisible={isOpen}
-        hasBackdrop={false}
         style={{margin: 0}}
         animationIn="zoomIn"
         animationOut="fadeOut"
@@ -31,6 +28,7 @@ export function ImagePreview({uri}:Props) {
           <ImageBackground
             source={{uri}}
             style={{flex: 1, width: '100%'}}
+            resizeMode="contain"
           >
             <Entypo name="chevron-left" color="#FFFFFF" size={27} />
           </ImageBackground>
