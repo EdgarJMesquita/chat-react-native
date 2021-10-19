@@ -1,22 +1,31 @@
-import React, { useState } from 'react';
-import { View, Image, ImageBackground, Pressable } from 'react-native';
-import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
+import React, { useEffect, useState } from 'react';
+import { Image, ImageBackground, Pressable } from 'react-native';
 import RNModal from 'react-native-modal';
 import { Entypo } from '@expo/vector-icons';
 import { styles } from './styles';
 
 type Props = {
   uri?: string;
-  base64?: string;
-  ext?: string;
 }
 
-export function ImagePreview({uri,base64, ext}:Props) {
+let image:Image | null;
+
+export function ImagePreview({uri}:Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const [height, setHeight] = useState(0);
+  
+
+  useEffect(() => {
+    if(!uri) return;
+    Image.getSize(uri, (width,height)=>{
+      const calculatedHeight = height * (200/width);
+      setHeight(calculatedHeight)
+    });
+  }, [uri]);
 
   return(
     <Pressable onPress={()=>setIsOpen(true)}>
-      <Image source={{uri}} resizeMode="contain" style={styles.image}/>
+      <Image ref={(e)=>image=e} source={{uri}} style={[styles.image, { height }]} resizeMode="contain" />
       <RNModal
         isVisible={isOpen}
         style={{margin: 0}}

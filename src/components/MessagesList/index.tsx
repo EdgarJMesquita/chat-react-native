@@ -25,7 +25,7 @@ type Props = {
 
 export function MessagesList({socket}:Props) {
   const [messages, setMessages] = useState<MessageProps[]>([]);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [isFirstLoad, setIsFirstLoad] = useState(false);
 
   //AsyncStorage.removeItem('@messages');
 
@@ -56,6 +56,7 @@ export function MessagesList({socket}:Props) {
       const data:MessageProps[] = storage? JSON.parse(storage) : [];
       setMessages(data);
       setIsFirstLoad(true);
+      console.log('firstLoad')
     })();
   }, []);
 
