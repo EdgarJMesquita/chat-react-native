@@ -16,15 +16,11 @@ const ChatContext = createContext({} as ContextType);
 function ContextProvider({children}:ProviderType){
   const [socket, setSocket] = useState<Socket>();
 
-  /* useEffect(useCallback(() => {
-    const newSocket = io('ws://192.168.0.103',{ query: { userId: 'Mobile' } });
-    setSocket(newSocket);
-    console.log('useCallBack');
-  },[],),[]); */
-
   useEffect(() => {
-    console.log('useEffect');
-    const newSocket = io('ws://192.168.0.103',{ query: { userId: 'Mobile' } });
+    const production = 'ws://api-chatx.herokuapp.com';
+    const dev = 'ws://192.168.0.103';
+
+    const newSocket = io(production,{ query: { username: 'Edgar' } });
     setSocket(newSocket);
   }, [])
 

@@ -44,11 +44,12 @@ export function Input({socket}:Props) {
         base64: response.base64,
         ext,
       },
-      sender: 'Mobile',
+      sender: 'Edgar',
       text: ''
     };
     socket?.emit('chat', picture);
   }
+
   return(
     <View style={styles.input}>
       <TextInput
