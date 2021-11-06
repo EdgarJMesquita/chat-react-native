@@ -6,28 +6,25 @@ import ClipSvg from '../../assets/clip.svg';
 import { styles } from './styles';
 import { Socket } from 'socket.io-client';
 import * as ImagePicker from 'expo-image-picker';
-import { api } from '../../services/api';
+import { ContactProps } from '../../screens/Contacts';
  
 type Props = {
   socket: Socket | undefined;
-}
-type ResponseProps = {
-  data: {
-    imageURL: string;
-  }
+  contact: ContactProps;
 }
 
-export function Input({socket}:Props) {
+export function Input({contact, socket}:Props) {
   const [newMessage, setNewMessage] = useState('');
 
   function sendMessage(){
     if(!newMessage) return;
     const _newMessage = {
       text: newMessage.trim(),
-      sender: 'Mobile'
+      sender: 'Mobile',
+      receiver: contact.userId
     }
     setNewMessage('');
-    socket?.emit('chat', _newMessage);
+    socket?.emit('private', _newMessage);
   }
 
   async function sendFile(){
@@ -48,28 +45,31 @@ export function Input({socket}:Props) {
       text: ''
     };
     socket?.emit('chat', picture);
+    
   }
 
   return(
-    <View style={styles.input}>
-      <TextInput
-        multiline
-        style={{flex: 1,height: 50, color: '#FFFFFF'}}
-        placeholderTextColor={'#F8F8F8'}
-        onChangeText={setNewMessage}
-        value={newMessage}
-        placeholder="Type a message..."
-      />
-      <Pressable onPress={sendFile} >
-        <BorderlessButton style={styles.button}>
-          <ClipSvg width={27} height={27}/>
-        </BorderlessButton>
-      </Pressable>
-      <Pressable onPress={sendMessage} >
-        <BorderlessButton style={styles.button}>
-          <SendSvg width={27} height={27}/>
-        </BorderlessButton>
-      </Pressable>
+    <View style={{padding: 15}}>
+      <View style={styles.input}>
+        <TextInput
+          multiline
+          style={{flex: 1,height: 50, color: '#FFFFFF'}}
+          placeholderTextColor={'#F8F8F8'}
+          onChangeText={setNewMessage}
+          value={newMessage}
+          placeholder="Digite sua mensagem..."
+          />
+        <Pressable onPress={sendFile} >
+          <BorderlessButton style={styles.button}>
+            <ClipSvg width={27} height={27}/>
+          </BorderlessButton>
+        </Pressable>
+        <Pressable onPress={sendMessage} >
+          <BorderlessButton style={styles.button}>
+            <SendSvg width={27} height={27}/>
+          </BorderlessButton>
+        </Pressable>
+      </View>
     </View>
   );
 }

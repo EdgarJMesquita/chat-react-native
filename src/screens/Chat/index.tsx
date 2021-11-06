@@ -1,16 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
 import { MessagesList } from '../../components/MessagesList';
 import { Input } from '../../components/Input';
-import { useChat } from '../../hooks/useChat';
+import { useSocket } from '../../hooks/useSocket';
+import { Header } from '../../components/Header';
+import { ChatScreenProps } from '../../routes';
 
-export function Chat() {
-  const { socket } = useChat(); 
+export function Chat({route ,navigation}:ChatScreenProps) {
+  const { socket } = useSocket();
+  const contact = route.params.contact;
+
   return (
     <View style={styles.chat}>
-      <MessagesList socket={socket}/>
-      <Input socket={socket}/>
+      <Header contact={contact} goBack={()=>navigation.goBack()}/>
+      <MessagesList contact={contact} socket={socket} isFocused={navigation.isFocused()}/>
+      <Input contact={contact} socket={socket}/>
     </View>
   );
 }

@@ -1,7 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ContextProvider } from './src/context/context';
 import { Routes } from './src/routes';
+import AppLoading from 'expo-app-loading';
+import { retrieveUserData } from './src/storage';
+import { Background } from './src/components/Background';
+import { useFonts } from 'expo-font';
+import { Inter_400Regular } from '@expo-google-fonts/inter';
 
 export type MessageProps = {
   id: string;
@@ -9,11 +14,36 @@ export type MessageProps = {
   sender: string;
 }
 
+export type User = {
+  username: string;
+  id?: string;
+}
+
 export default function App() {
+  const [isReady, setIsReady] = useState(false);
+  const [userData, setUserData] = useState<User>();
+
+  let [ isFontLoaded ] = useFonts({
+    Inter_400Regular
+  });
+
+  useEffect(() => {
+    (async()=>{
+      setUserData(await retrieveUserData());
+      setIsReady(true);
+    })();
+  }, []);
+
+  if(!isReady || !isFontLoaded){
+    return <AppLoading />
+  }
+
   return (
-    <ContextProvider>
-      <StatusBar style="light" translucent/>
-      <Routes />
-    </ContextProvider>
+    <Background>
+      <ContextProvider userData={userData}>
+        <StatusBar style="light" translucent/>
+        <Routes />
+      </ContextProvider>
+    </Background>
   );
 }

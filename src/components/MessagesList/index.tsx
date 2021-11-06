@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList } from 'react-native'
-import { Message } from '../Message';
+import { MessageCard } from '../MessageCard';
 import { Socket } from 'socket.io-client';
 import { styles } from './styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { saveAssetAndReturnURI } from '../../utils/saveAssetAndReturnURI';
 import { fetchMessages, saveOneMessage } from '../../storage';
+import { ContactProps } from '../../screens/Contacts';
+import { useSocket } from '../../hooks/useSocket';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect, useIsFocused } from '@react-navigation/core';
 
 export type MessageProps = {
   id: string;
@@ -13,6 +16,7 @@ export type MessageProps = {
   sender: string;
   date: string;
   uri:string;
+  receiver: string;
   image?: {
     base64: string;
     ext: string;
@@ -21,34 +25,39 @@ export type MessageProps = {
 
 type Props = {
   socket: Socket | undefined;
+  contact: ContactProps;
+  isFocused: boolean;
 }
 
-export function MessagesList({socket}:Props) {
+export function MessagesList({contact, socket, isFocused}:Props) {
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [isFirstLoad, setIsFirstLoad] = useState(false);
-
-  //AsyncStorage.removeItem('@messages');
-
- 
+  const [isMounted, setIsMounted] = useState(true);
 
   useEffect(() => {
     (async()=>{
       if(isFirstLoad) return;
-      setMessages(await fetchMessages());
+      setMessages(await fetchMessages(contact.userId));
       setIsFirstLoad(true);
     })();
   }, []);
 
   useEffect(()=>{
-    socket?.on('chat',async(msg:MessageProps)=>{
-
-      const message = msg.image? await saveAssetAndReturnURI(msg) : msg;
-      setMessages(prev=>[message,...prev]);
+    if(!isMounted) return;
+    
+    socket?.on(`private`,async(msg:MessageProps)=>{
+      const message = msg.image? await saveAssetAndReturnURI(msg):msg;
       saveOneMessage(message);
-      
-    })
-  },
-  [socket]);
+
+      if(msg.sender === contact.userId){
+        isMounted && setMessages(prev=>[message,...prev]);
+      }
+    });
+
+    return ()=>{
+      setIsMounted(false);
+    }
+  },[socket]);
 
   return(
     <FlatList 
@@ -56,7 +65,8 @@ export function MessagesList({socket}:Props) {
       inverted
       keyExtractor={item=>item.id}
       style={styles.flatList}
-      renderItem={({item})=> <Message message={item}/> }
+      contentContainerStyle={{paddingHorizontal: 15}}
+      renderItem={({item})=> <MessageCard message={item}/> }
     />
   );
 }

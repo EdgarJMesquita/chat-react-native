@@ -9,7 +9,7 @@ type Props = {
   message: MessageProps;
 }
 
-export function Message({message}:Props) {
+export function MessageCard({message}:Props) {
   const isSender = message.sender === 'Mobile';
 
   return(

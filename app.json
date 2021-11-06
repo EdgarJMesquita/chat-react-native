@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "chat",
-    "slug": "chat",
+    "name": "Chat Ordinário",
+    "slug": "chat-ordinário",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -35,7 +35,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.edgarjonas.chat"
+      "package": "com.edgarjonas.chat-ordinario"
     },
     "web": {
       "favicon": "./assets/favicon.png"

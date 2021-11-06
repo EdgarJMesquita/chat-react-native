@@ -1,40 +1,47 @@
 import React from 'react';
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import { io ,Socket } from 'socket.io-client';
+import { User } from '../../App';
 
 
 type ContextType = {
   socket: Socket | undefined;
+  user: User | undefined;
+  setUser: (user:User)=>void;
 }
 
 type ProviderType = {
   children: ReactNode;
+  userData: User | undefined;
 }
 
-const ChatContext = createContext({} as ContextType);
+const SocketContext = createContext({} as ContextType);
 
-function ContextProvider({children}:ProviderType){
-  const [socket, setSocket] = useState<Socket>();
+function ContextProvider({userData, children}:ProviderType){
+  const [ socket, setSocket ] = useState<Socket>();
+  const [ user, setUser ] = useState<User|undefined>(userData);
 
   useEffect(() => {
+    if(!user) return;
     const production = 'ws://api-chatx.herokuapp.com';
-    const dev = 'ws://192.168.0.103';
+    const dev = 'ws://192.168.0.107';
 
-    const newSocket = io(production,{ query: { username: 'Edgar' } });
-    setSocket(newSocket);
-  }, [])
+    setSocket(io(dev,{ query: { userId: user.username } }));
+  }, [user]);
 
   return(
-    <ChatContext.Provider value={{
-      socket
+    <SocketContext.Provider value={{
+      user,
+      socket,
+      setUser
     }}>
       {children}
-    </ChatContext.Provider>
+    </SocketContext.Provider>
     
   )
 }
 
 export { 
-  ChatContext,
+  SocketContext,
   ContextProvider
 }

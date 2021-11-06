@@ -19,6 +19,7 @@ export async function saveAssetAndReturnURI(msg:MessageProps) {
     date: msg.date,
     sender: msg.sender,
     text: msg.text,
+    receiver: msg.receiver,
     uri
   }
 }
