@@ -33,19 +33,18 @@ export function MessagesList({contact, socket, isFocused}:Props) {
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [isFirstLoad, setIsFirstLoad] = useState(false);
   const [isMounted, setIsMounted] = useState(true);
+  const { newMessage } = useSocket();
 
   useEffect(() => {
     (async()=>{
-      if(isFirstLoad) return;
       setMessages(await fetchMessages(contact.userId));
-      setIsFirstLoad(true);
     })();
-  }, []);
+  }, [newMessage]);
 
-  useEffect(()=>{
+  /* useEffect(()=>{
     if(!isMounted) return;
-    
     socket?.on(`private`,async(msg:MessageProps)=>{
+      console.log(msg);
       const message = msg.image? await saveAssetAndReturnURI(msg):msg;
       saveOneMessage(message);
 
@@ -57,7 +56,7 @@ export function MessagesList({contact, socket, isFocused}:Props) {
     return ()=>{
       setIsMounted(false);
     }
-  },[socket]);
+  },[socket]); */
 
   return(
     <FlatList 

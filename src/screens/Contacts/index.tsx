@@ -39,17 +39,18 @@ export function Contacts({...rest}:ScreenProps) {
     }
   },[]);
 
-  useFocusEffect(useCallback(()=>{
+  /* useEffect(()=>{
     if(!isMounted) return;
     socket?.on(`private`,async(msg:MessageProps)=>{
       const message = msg.image? await saveAssetAndReturnURI(msg) : msg;
+      console.log('rendered');
       saveOneMessage(message);
     });
 
     return ()=>{
       setIsMounted(false);
     }
-  },[socket]));
+  },[socket]); */
 
   return(
     <View style={styles.container}>
