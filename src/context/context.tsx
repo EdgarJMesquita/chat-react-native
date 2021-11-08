@@ -31,7 +31,7 @@ function ContextProvider({userData, children}:ProviderType){
     const production = 'ws://api-chatx.herokuapp.com';
     const dev = 'ws://192.168.0.107';
 
-    setSocket(io(dev,{ query: { userId: user.username } }));
+    setSocket(io(dev,{ query: {userId: user.username} }));
   }, [user]);
 
   useEffect(()=>{
