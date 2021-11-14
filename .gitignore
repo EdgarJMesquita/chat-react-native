@@ -10,8 +10,7 @@ npm-debug.*
 web-build/
 
 google-services.json
-
-android/app/google-services.json
+#android/app/google-services.json
 chat-b920c-firebase-adminsdk-zx62e-de07cf388b.json
 
 # macOS
@@ -78,4 +77,6 @@ dist/
 
 # @end expo-cli
 
-token2.json
+token.json
+
+chat-b920c-firebase-adminsdk-zx62e-a47a055c6e.json

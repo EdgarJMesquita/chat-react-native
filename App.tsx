@@ -8,6 +8,7 @@ import { Background } from './src/components/Background';
 import { useFonts } from 'expo-font';
 import { Inter_400Regular } from '@expo-google-fonts/inter';
 import { getDeviceToken } from './src/utils/getDeviceToken';
+import { ToastAndroid } from 'react-native';
 
 export type MessageProps = {
   id: string;
@@ -40,7 +41,9 @@ export default function App() {
   if(!isReady || !isFontLoaded){
     return <AppLoading />
   }
-  
+  /* const isHermes = () => !!global.HermesInternal as any;
+  ToastAndroid.show(isHermes+'',3000); */
+
   return (
     <Background>
       <ContextProvider userData={userData}>
