@@ -7,6 +7,7 @@ import { retrieveUserData } from './src/storage';
 import { Background } from './src/components/Background';
 import { useFonts } from 'expo-font';
 import { Inter_400Regular } from '@expo-google-fonts/inter';
+import { getDeviceToken } from './src/utils/getDeviceToken';
 
 export type MessageProps = {
   id: string;
@@ -34,10 +35,12 @@ export default function App() {
     })();
   }, []);
 
+  //getDeviceToken().then(res=>console.log(res)).catch(err=>console.log(err));
+
   if(!isReady || !isFontLoaded){
     return <AppLoading />
   }
-
+  
   return (
     <Background>
       <ContextProvider userData={userData}>

@@ -35,7 +35,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.edgarjonas.chat-ordinario"
+      "package": "com.edgarjonas.chat"
     },
     "web": {
       "favicon": "./assets/favicon.png"
